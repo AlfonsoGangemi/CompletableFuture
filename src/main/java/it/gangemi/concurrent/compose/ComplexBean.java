@@ -15,6 +15,10 @@ public class ComplexBean {
         this.valueLong = valueLong;
     }
 
+    public static ComplexBean build(String key) {
+        return new ComplexBean(key, null, null);
+    }
+
     public static ComplexBean build(StringBean stringBean) {
         return new ComplexBean(stringBean.getKey(),stringBean.getValueString(),null);
     }
