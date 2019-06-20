@@ -3,6 +3,7 @@ package it.gangemi.concurrent.compose;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class ComposeClass {
 
@@ -16,7 +17,7 @@ public class ComposeClass {
                 }
                 List<StringBean> result = new ArrayList<>();
                 for (int i = 0; i < 10; i++) {
-                    result.add(StringBean.build(Integer.toString(i), UUID.randomUUID().toString()));
+                    result.add(StringBean.build(Integer.toString(i), String.valueOf((char)((int)'A'+i))));
                 }
                 return result;
             }
@@ -40,13 +41,14 @@ public class ComposeClass {
 
     public static void main(String[] args) {
         ComposeClass composeClass = new ComposeClass();
-        CompletableFuture<Map<String, Object>> mapCompletableFuture = composeClass.stringBeanCompletableFuture
-                .thenCombine(composeClass.longBeanCompletableFuture, (s, l) -> {
-                    Map<String, Object> objectHashMap = new HashMap<>();
-                    objectHashMap.put("LongValues", l);
-                    objectHashMap.put("StringValues", s);
-            return objectHashMap;
-        });
+        CompletableFuture<Map<String, ComplexBean>> mapCompletableFuture = composeClass.stringBeanCompletableFuture
+                .thenCombine(composeClass.longBeanCompletableFuture,
+                        (stringList, longList) -> {
+                            Map<String, ComplexBean> complexBeanMap = stringList.stream().collect(Collectors.toMap(StringBean::getKey, ComplexBean::build));
+                            longList.forEach( x -> complexBeanMap.get(x.getKey()).setValueLong(x.getValueLong()));
+                            return complexBeanMap;
+                        }
+                );
         try {
             System.out.println(mapCompletableFuture.get());
         } catch (InterruptedException e) {
