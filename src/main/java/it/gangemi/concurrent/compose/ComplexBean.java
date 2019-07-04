@@ -1,6 +1,6 @@
 package it.gangemi.concurrent.compose;
 
-public class ComplexBean {
+public class ComplexBean implements Comparable<ComplexBean>{
 
     private String key;
     private String valueString;
@@ -34,5 +34,10 @@ public class ComplexBean {
                 ", valueString='" + valueString + '\'' +
                 ", valueLong=" + valueLong +
                 '}';
+    }
+
+    @Override
+    public int compareTo(ComplexBean o) {
+        return o.valueLong.intValue() - valueLong.intValue();
     }
 }

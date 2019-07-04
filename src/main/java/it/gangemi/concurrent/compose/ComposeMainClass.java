@@ -1,11 +1,19 @@
-package it.gangemi.concurrent;
+package it.gangemi.concurrent.compose;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
-public class MainClass {
+public class ComposeMainClass {
 
-    private static Logger logger = Logger.getLogger(MainClass.class.getName());
+    private static Logger logger;// = Logger.getLogger(ComposeMainClass.class.getName());
+
+    static {
+        String path = ComposeMainClass.class.getClassLoader()
+                .getResource("logging.properties")
+                .getFile();
+        System.setProperty("java.util.logging.config.file", path);
+        logger = Logger.getLogger(ComposeMainClass.class.getName());
+    }
 
     public static void main(String[] args) {
 

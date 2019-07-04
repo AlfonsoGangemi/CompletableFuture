@@ -1,9 +1,6 @@
 package it.gangemi.concurrent.compose;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -70,15 +67,12 @@ public class ComposeClass {
                         }
                 );
         try {
-            System.out.println(mapCompletableFuture.get());
+            System.out.println(mapCompletableFuture.get().values().stream().sorted().collect(Collectors.toList()));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
-
-
-
 
 }
